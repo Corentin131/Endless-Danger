@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33a9e61228c91044bc2f651a060e87e, type: 3}
+  m_Name: Turbo 1
+  m_EditorClassIdentifier: 
+  name: Turbo 1
+  cost: 800
+  prefab: {fileID: 7392494186416989056, guid: aae220e7ff15ddc4c859588354df4bd2, type: 3}
+  icon: {fileID: 0}
+  delayBetweenMovement: 0.1
+  powerMaxDistance: 20

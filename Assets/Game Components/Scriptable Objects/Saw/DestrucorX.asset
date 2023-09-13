@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f0fe8c827fb2b4cb5ace9a99c804c1, type: 3}
+  m_Name: DestrucorX
+  m_EditorClassIdentifier: 
+  name: DestructorX
+  cost: 800
+  prefab: {fileID: 2585789313078932070, guid: e5639b68fe01ce94daece1a6c988e88f, type: 3}
+  icon: {fileID: 0}
+  damage: 20
