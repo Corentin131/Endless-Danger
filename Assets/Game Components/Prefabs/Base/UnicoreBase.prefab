@@ -340,31 +340,40 @@ MonoBehaviour:
     shakingPower: 0
     machineSpeed: 300
     cameraSpeed: 15
+    delayToRecharge: 0.8
+    nbOfShoot: 5
     vfxToSwitch:
     - {fileID: 5942616868658366210}
     - {fileID: 2089277520901167225}
     objectsToActivate:
     - {fileID: 6197411962320948152}
+    currentNbOfShoot: 0
   - power: 2
     shakingTime: 0
     shakingPower: 0
     machineSpeed: 450
     cameraSpeed: 15
+    delayToRecharge: 1
+    nbOfShoot: 4
     vfxToSwitch:
     - {fileID: 4322284137626529795}
     - {fileID: 3958405483049277455}
     objectsToActivate:
     - {fileID: 2825781083932632895}
+    currentNbOfShoot: 0
   - power: 3
     shakingTime: 0.15
     shakingPower: 0.3
     machineSpeed: 600
     cameraSpeed: 30
+    delayToRecharge: 5
+    nbOfShoot: 2
     vfxToSwitch:
     - {fileID: 5542254961991759733}
     - {fileID: 312965728399080838}
     objectsToActivate:
     - {fileID: 7259325179430464759}
+    currentNbOfShoot: 0
   rotationToAdd: 90
   powerMaxDistance: 20
 --- !u!1 &6686759300505625266

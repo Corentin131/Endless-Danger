@@ -54,5 +54,6 @@
     },
     "cSpell.words": [
         "Targeter"
-    ]
+    ],
+    "dotnet.defaultSolution": "Endless-Danger.sln"
 }

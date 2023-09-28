@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     SkinManager skinManagerScript;
 
+    bool showLineRenderer = true;
 
     public struct Transition
     {
@@ -40,6 +41,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         currentState.ExecuteState();
+
+        if (FireButton.instance.shoot == true)
+        {
+            trajectoryLineRenderer.gameObject.SetActive(false);
+            showLineRenderer = false;
+        }else 
+        {
+            trajectoryLineRenderer.gameObject.SetActive(true);
+            showLineRenderer = true;
+        }
     }
 
     public void Transit(Transition transition)
@@ -48,6 +59,16 @@ public class PlayerMovement : MonoBehaviour
         currentState = new TransitState(this,transition);
     }
 
+    public void Freeze()
+    {
+        currentState.ResetForChangingState();
+        currentState = new FreezeState(this);
+    }
+
+    public void Unfreeze()
+    {
+        currentState = new StaticState(this);
+    }
 
     public class CurrentLocalState 
     {
@@ -66,6 +87,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         public virtual void CalculateTrajectory(Vector3 position){}
+
+        public virtual void ResetForChangingState()
+        {}
     }
 
     class StaticState : CurrentLocalState
@@ -74,8 +98,6 @@ public class PlayerMovement : MonoBehaviour
 
         public StaticState(PlayerMovement playerMovement) : base(playerMovement)
         {
-            this.playerMovement = playerMovement;
-
             PlayerActions.instance.onTargeterInputHolding += CalculateTrajectory;
             PlayerActions.instance.onTargeterInputUp += MakeATransition;
         }
@@ -83,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         void MakeATransition()
         {
             playerMovement.trajectoryLineRenderer.positionCount = 0;
-            PlayerActions.instance.onTargeterInputHolding -= CalculateTrajectory;
+            ResetForChangingState();
             playerMovement.Transit(transition);
         }
 
@@ -91,6 +113,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Utilities.VerifyIfNull(playerMovement.onStaticState);
             return base.ExecuteState();
+        }
+
+        public override void ResetForChangingState()
+        {
+            PlayerActions.instance.onTargeterInputHolding -= CalculateTrajectory;
+            PlayerActions.instance.onTargeterInputUp -= MakeATransition;
         }
 
         public override void  CalculateTrajectory(Vector3 inputPosition)
@@ -130,15 +158,12 @@ public class PlayerMovement : MonoBehaviour
 
         public TransitState(PlayerMovement playerMovement,Transition transition) : base(playerMovement)
         {
-            this.playerMovement = playerMovement;
             this.transition = transition;
 
             float adhesion = PlayerStats.instance.currentSaw.adhesion;
             points = Utilities.CalculateBounce(playerMovement.transform.position,transition.direction,adhesion:adhesion).ToArray();
             hitPoints = Utilities.CalculateBounce(playerMovement.transform.position,transition.direction).ToArray();
-            
             transforms = Utilities.GetTransformFromBounce(playerMovement.transform.position,transition.direction,adhesion:adhesion).ToArray();
-
             movement.MakeMovement(playerMovement.transform,points,playerMovement.speed);
 
             Utilities.VerifyIfNull(playerMovement.onStartTransitState);
@@ -149,12 +174,12 @@ public class PlayerMovement : MonoBehaviour
         {
             if (movement.IsMovementFinish())
             {
-                Utilities.VerifyIfNull(playerMovement.onStopTransitState);
                 playerMovement.currentState = new StaticState(playerMovement);
-
                 playerMovement.lastTargetPosition = points[points.Length-1];
+                
+                Utilities.VerifyIfNull(playerMovement.onStopTransitState);
             }
-            
+
             VerifyBounce();
 
             movement.MoveStrength();
@@ -188,6 +213,22 @@ public class PlayerMovement : MonoBehaviour
 
                 currentTargetTransform = newCurrentTargetTransform;
             }
+        }
+    }
+
+    class FreezeState : CurrentLocalState
+    {
+        public FreezeState(PlayerMovement playerMovement) : base(playerMovement)
+        {
+            PlayerActions.instance.onTargeterInputHolding += RotateBase;
+        }
+
+        void RotateBase(Vector3 position)
+        {
+            Vector3 dir = Utilities.CalculateDirection(playerMovement.transform.position , position);
+            Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
+            playerMovement.skinManagerScript.currentGunScript.RotateTo(rotation);
+            playerMovement.skinManagerScript.currentBaseScript.RotateTo(rotation);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class AnimationPack : MonoBehaviour
 {
@@ -10,12 +11,14 @@ public class AnimationPack : MonoBehaviour
         ScaleUp,
         ScaleDawn,
         OpacityDown,
-        RotateRandomly
+        RotateRandomly,  
+        Move
     }
-
     public AnimationType animationType;
 
     [Header("Global data")]
+    public LeanTweenType easeType;
+    public bool animateOnStart = true;
     public float time;
     public float speed;
 
@@ -23,6 +26,9 @@ public class AnimationPack : MonoBehaviour
 
     [Header("Scale Data")]
     public float to;
+
+    [Header("Move Data")]
+    public Vector3 toVector;
 
     
 
@@ -32,25 +38,35 @@ public class AnimationPack : MonoBehaviour
     void Start()
     {
         originalScale = transform.localScale;
-
-        switch(animationType)
+        if (animateOnStart)
         {
-            case AnimationType.ScaleUp:
-                currentState = new ScaleUpState(this);
-                break;
+            switch(animationType)
+            {
+                case AnimationType.ScaleUp:
+                    currentState = new ScaleUpState(this);
+                    break;
 
-            case AnimationType.OpacityDown:
-                currentState = new OpacityDownState(this);
-                break;
-            case AnimationType.RotateRandomly:
-                currentState = new RotateRandomly(this);
-                break;
+                case AnimationType.OpacityDown:
+                    currentState = new OpacityDownState(this);
+                    break;
+
+                case AnimationType.RotateRandomly:
+                    currentState = new RotateRandomly(this);
+                    break;
+
+                case AnimationType.Move:
+                    currentState = new MovingState(this);
+                    break;
+            }
         }
     }
 
     void Update()
     {
-         currentState.ExecuteState();
+        if (currentState != null)
+        {
+            currentState.ExecuteState();
+        }
     }
 
     public void ScaleUp(Vector3 toAdd,float time)
@@ -72,6 +88,10 @@ public class AnimationPack : MonoBehaviour
         LeanTween.scale(gameObject,originalScale,time);
     }
 
+    public void MoveTo(Vector3 to,float speed,float time,[Optional]LeanTweenType leanTweenType)
+    {
+        currentState = new MovingState(this,to,speed,time,leanTweenType);
+    }
 
     class CurrentState
     {
@@ -89,7 +109,7 @@ public class AnimationPack : MonoBehaviour
         {
             Vector3 toAdd = new Vector3(animationPack.to,animationPack.to,animationPack.to);
             targetScale = toAdd+animationPack.transform.localScale;
-            LeanTween.scale(animationPack.gameObject,targetScale,animationPack.time);
+            LeanTween.scale(animationPack.gameObject,targetScale,animationPack.time).setEase(animationPack.easeType);
             this.animationPack = animationPack;
         }
 
@@ -121,7 +141,7 @@ public class AnimationPack : MonoBehaviour
                 Color c = image.color;
                 c.a = val;
                 image.color = c;
-            });
+            }).setEase(animationPack.easeType);
         }
 
         public override CurrentState ExecuteState()
@@ -145,7 +165,7 @@ public class AnimationPack : MonoBehaviour
         public RotateRandomly(AnimationPack animationPack)
         {
             this.animationPack = animationPack;
-            eulers = new Vector3(Random.Range(-1,1),Random.Range(-1,1),Random.Range(-1,1))*animationPack.speed;
+            eulers = new Vector3(Random.Range(1,2),Random.Range(1,2),Random.Range(1,2))*animationPack.speed;
         }
 
         public override CurrentState ExecuteState()
@@ -153,6 +173,50 @@ public class AnimationPack : MonoBehaviour
             animationPack.transform.Rotate(eulers);
             return base.ExecuteState();
         }
+    }
+
+    class MovingState : CurrentState
+    {
+        Vector3 to;
+        float speed;
+        float time;
+        LeanTweenType easeType;
+
+        public MovingState(AnimationPack animationPack,Vector3 to,float speed,float time,[Optional]LeanTweenType easeType)
+        {
+            this.to = to;
+            this.speed = speed;
+            this.time = time;
+            this.animationPack = animationPack;
+            this.easeType = easeType;
+            StartMoving();
+        }
+
+        public MovingState(AnimationPack animationPack)
+        {
+            this.to = animationPack.toVector;
+            this.speed = animationPack.speed;
+            this.time = animationPack.time;
+            this.animationPack = animationPack;
+            this.easeType = animationPack.easeType;
+            StartMoving();
+        }
+
+        void StartMoving()
+        {
+            LeanTween.moveLocal(animationPack.gameObject,to,time).setEase(easeType);
+        }
+
+        public override CurrentState ExecuteState()
+        {
+
+            if (animationPack.transform.position == to)
+            {
+                Destroy(animationPack.gameObject);
+            }
+            return base.ExecuteState();
+        }
+
     }
 
 }

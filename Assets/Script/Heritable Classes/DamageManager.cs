@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -7,13 +8,19 @@ public class DamageManager : MonoBehaviour
 {
     [Header("Source")]
     public List<GameObject> gunImpactEffects;
-    public List<GameObject> baseDamageEffects;
 
 
     [Header("Data")]
-    public float shakingTime;
-    public float shakingPower;
+    public List<BaseVfxData> baseDamageEffects;
     
+    [Serializable]
+    public struct BaseVfxData
+    {  
+        [Range(1,3)]
+        public int power;
+        public List<GameObject> effects;
+    }
+
     public virtual void ApplyGunDamage(Vector3 position)
     {
         if (gunImpactEffects != null)
@@ -22,10 +29,6 @@ public class DamageManager : MonoBehaviour
             {
                 Instantiate(effect,position,transform.rotation);
             }
-
-            PrincipalCamera.instance.Shake(shakingTime,shakingPower);
-
-           
         }  
     }
 
@@ -36,15 +39,33 @@ public class DamageManager : MonoBehaviour
         if (effectToSpawn != null)
         {
             effects = effectToSpawn;
-        }else
+        }
+        else
         {
-            effects = baseDamageEffects;
-            Debug.Log("Hit");
+            effects = GetVfxData(PowerBar.instance.power).effects;
         }
 
         foreach (GameObject objectToSpawn in effects)
         {
             Instantiate(objectToSpawn,position,rotation);
         }
+    }
+
+    public virtual void ApplyExplosiveDamage(Vector3 position,float damage)
+    {
+        Debug.Log(transform + " "+damage);
+    }
+
+    BaseVfxData GetVfxData(int power)
+    {
+        foreach (BaseVfxData vfxData in baseDamageEffects)
+        {
+            if (vfxData.power == power)
+            {
+                return vfxData;
+            }
+        }
+
+        return new BaseVfxData();
     }
 }

@@ -4948,7 +4948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88992a5ea50a5a140be03c5e45244894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootByRayCast: 1
+  typeOfShoot: 0
   ball: {fileID: 1323978347762241430, guid: be17c1b78504c184784467858deff3bb, type: 3}
   onShootParticles:
   - {fileID: 5201882204988395949}
@@ -5003,11 +5003,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 306b2a829364d8c40a816f262153621b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shooter: {fileID: 5201882204030451322}
+  playerMovementScript: {fileID: 0}
+  skinManagerScript: {fileID: 0}
+  shooters:
+  - {fileID: 5201882204030451322}
   delay: 0.2
   rotationToAdd: 90
   shakePower: 0.05
   shakeDuration: 0.05
+  canShoot: 1
+  index: 0
 --- !u!1 &5201882204988395951
 GameObject:
   m_ObjectHideFlags: 0

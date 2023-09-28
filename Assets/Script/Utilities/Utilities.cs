@@ -1,3 +1,4 @@
+
 using System.Linq;
 using System;
 using System.Collections;
@@ -6,6 +7,13 @@ using UnityEngine;
 
 public class Utilities
 {
+
+     struct BounceData
+     {
+          public Vector3 vector3;
+          public Transform transform;
+     }
+
      public static Vector3 GetWorldMousePos()
      {
           Vector3 mousePos;
@@ -38,51 +46,38 @@ public class Utilities
      
      public static List<Vector3> CalculateBounce(Vector3 startPoint,Vector3 direction,float maxDistance = 100,int maxBounce = 5,bool drawLine = false,float adhesion = 1)
      {
-          List<Vector3> points = new List<Vector3>{startPoint};
+          List<Vector3> vectors = new List<Vector3>(){};
 
-          RaycastHit hit;
+          List<BounceData> bounceDatas = CalculateGlobalBounce(startPoint,direction,maxDistance,maxBounce,drawLine,adhesion);
 
-          Physics.Raycast(startPoint, direction, out hit, maxDistance);
-          Vector3 currentStartPosition = startPoint;
-
-          foreach (int bounceIndex in Enumerable.Range(0,maxBounce))
+          foreach (BounceData bounceData in  bounceDatas)
           {
-               if (Physics.Raycast(currentStartPosition, direction, out hit, 100))
-               {
-                    if (drawLine == true)
-                    {
-                         Debug.DrawLine(currentStartPosition, hit.point, Color.red);
-                    }
-                    
-                    //Calculate adhesion
-                    Vector3 oppositeDir =  -direction;
-                    Debug.DrawRay(hit.point, oppositeDir*adhesion, Color.blue);
-                    Vector3 finalPoint = (hit.point+(oppositeDir*adhesion));
-
-                    Vector3 normal = hit.normal;
-                    direction = Vector3.Reflect(direction, normal).normalized;
-                    
-
-                    currentStartPosition = finalPoint;
-                    points.Add(finalPoint);
-
-                    Bounce bounce = hit.transform.GetComponent<Bounce>();
-
-                    if(bounce == null || bounce.bounce == false)
-                    {
-                         break;
-                    }
-               }
+               vectors.Add(bounceData.vector3);
           }
 
-          return points;
+          return  vectors;
 
 
      }
 
      public static List<Transform> GetTransformFromBounce(Vector3 startPoint,Vector3 direction,float maxDistance = 100,int maxBounce = 5,bool drawLine = false,float adhesion = 1)
      {
-          List<Transform> transforms = new List<Transform>{null};
+          
+          List<Transform> transforms = new List<Transform>(){};
+
+          List<BounceData> bounceDatas = CalculateGlobalBounce(startPoint,direction,maxDistance,maxBounce,drawLine,adhesion);
+
+          foreach (BounceData bounceData in  bounceDatas)
+          {
+               transforms.Add(bounceData.transform);
+          }
+
+          return  transforms;
+     }
+
+     static List<BounceData> CalculateGlobalBounce(Vector3 startPoint,Vector3 direction,float maxDistance = 100,int maxBounce = 5,bool drawLine = false,float adhesion = 1)
+     {
+          List<BounceData> bounceData = new List<BounceData>(){new BounceData{vector3 = startPoint,transform = null} };
 
           RaycastHit hit;
 
@@ -108,7 +103,13 @@ public class Utilities
                     
 
                     currentStartPosition = finalPoint;
-                    transforms.Add(hit.transform);
+
+                    bounceData.Add(new BounceData
+                    {
+                         vector3 = finalPoint,
+                         transform = hit.transform
+
+                    });
 
                     Bounce bounce = hit.transform.GetComponent<Bounce>();
 
@@ -119,8 +120,7 @@ public class Utilities
                }
           }
 
-          return transforms;
-
+          return bounceData;
 
      }
 

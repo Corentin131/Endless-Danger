@@ -17,7 +17,7 @@ public class FireButton : MonoBehaviour
     [HideInInspector]public float timeToRecharge;
     [HideInInspector]public bool isCharging = false;
 
-    bool shoot = false;
+    [HideInInspector]public bool shoot = false;
 
     void Awake()
     {
@@ -33,6 +33,8 @@ public class FireButton : MonoBehaviour
     private void Start() 
     {
         PlayerStats.instance.onCurrentGunChange += OnGunChange;
+        PlayerActions.instance.onFireInputDawn +=  StartFire;
+        PlayerActions.instance.onFireInputUp += StopFire;
         StartCoroutine(ActivateShooting());
     }
 

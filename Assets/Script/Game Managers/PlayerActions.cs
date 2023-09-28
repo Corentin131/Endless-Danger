@@ -11,7 +11,9 @@ public class PlayerActions : MonoBehaviour
     public Action<Vector3> onTargeterInputHolding;
     public Action<float> onScroll;
     public Action onTargeterInputUp;
+    public Action onFireInputHolding;
     public Action onFireInputDawn;
+    public Action onFireInputUp;
     
     //Mouse holding
     bool isHoldingLeft = false;
@@ -56,10 +58,18 @@ public class PlayerActions : MonoBehaviour
         if (isHoldingLeft == true) TargeterInputHolding(mousePosition);
         
 
-        if (Input.GetMouseButtonDown(1)) isHoldingRight = true;
-        if (Input.GetMouseButtonUp(1)) isHoldingRight = false;
+        if (Input.GetMouseButtonDown(1) && onFireInputDawn != null )
+        {
+            isHoldingRight = true;
+            onFireInputDawn();
+        }
+        if (Input.GetMouseButtonUp(1) && onFireInputUp != null)
+        {
+            isHoldingRight = false;
+            onFireInputUp();
+        }
 
-        if (isHoldingRight == true) Fire();
+        //if (isHoldingRight == true) Fire();
 
 
         float scrollValue = Input.mouseScrollDelta.y;
@@ -71,9 +81,9 @@ public class PlayerActions : MonoBehaviour
     //'onFireInputPressed' is in an function because this function is add in a event 
     public void Fire()
     {
-        if (onFireInputDawn != null)
+        if (onFireInputHolding != null)
         {
-            onFireInputDawn();
+            onFireInputHolding();
         }
     }
 

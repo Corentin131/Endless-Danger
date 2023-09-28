@@ -6,18 +6,19 @@ public class Gun : CustomableObject
 {
 
     [Header("Sources")]
-    public Shooter shooter;
+    public List<Shooter> shooters;
 
     [Header("Data")]
     public float delay;
     public float rotationToAdd = 90;
     public float shakePower;
     public float shakeDuration;
-    bool canShoot = true;
+    [HideInInspector]public bool canShoot = true;
+    [HideInInspector]public int index = 0;
 
     public override void Start()
     {
-        PlayerActions.instance.onFireInputDawn += Shoot;
+        PlayerActions.instance.onFireInputHolding += Shoot;
         base.Start();
     }
 
@@ -31,7 +32,8 @@ public class Gun : CustomableObject
     {
         if (canShoot &&  FireButton.instance.isCharging == false)
         {
-           shooter.Shoot();
+            
+           shooters[index].Shoot();
            PrincipalCamera.instance.Shake(shakeDuration,shakePower);
            StartCoroutine(Delay());
            FireButton.instance.SubtractBullet(1);
@@ -43,6 +45,12 @@ public class Gun : CustomableObject
     {
         canShoot = false;
         yield return new WaitForSeconds(delay);
+        index +=1;
+
+        if (index > shooters.Count-1)
+        {
+            index = 0;
+        }
         canShoot = true;
     }
 }

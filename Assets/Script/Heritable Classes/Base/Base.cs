@@ -23,16 +23,18 @@ public class Base : CustomableObject
     PowerData currentPowerData;
     
     [Serializable]
-    public struct PowerData
+    public class PowerData
     {
         public int power;
         public float shakingTime;
         public float shakingPower;
         public float machineSpeed;
         public float cameraSpeed;
+        public float delayToRecharge;
+        public int nbOfShoot;
         public List<Transform> vfxToSwitch;
-
         public List<GameObject> objectsToActivate;
+        public int currentNbOfShoot;
     }
 
     public override void Start()
@@ -44,6 +46,13 @@ public class Base : CustomableObject
         base.Start();
 
         currentPowerData = GetPowerData(1);
+
+        //Initialize de nb of shoot of the PowerBar
+        foreach(PowerData powerData in powerDatas)
+        {
+            PowerBar.instance.SetNbOfShoot(powerData.power,powerData.nbOfShoot);
+            powerData.currentNbOfShoot = powerData.nbOfShoot;
+        }
     }
 
     public override void OnTargeterInputHolding(Vector3 mousePosition)
@@ -80,6 +89,29 @@ public class Base : CustomableObject
     public override void OnStopTransitState()
     {
         Utilities.VFXSwitch(transitVfxHeader,false);
+
+        PowerData powerData = GetPowerData(PowerBar.instance.power);
+        powerData.currentNbOfShoot --;
+
+        if (powerData.currentNbOfShoot <= 0)
+        {
+            PowerBar.instance.Recharge(GetPowerData( PowerBar.instance.power).delayToRecharge);
+            PowerBar.instance.SetNbOfShoot(powerData.power,powerData.nbOfShoot);
+
+            OnPowerChange(0);
+            powerData.currentNbOfShoot = powerData.nbOfShoot;
+
+            playerMovementScript.Freeze();
+        }else
+        {
+            PowerBar.instance.SetNbOfShoot(powerData.power,powerData.currentNbOfShoot);
+        }
+    }
+
+    public override void OnStopRecharge()
+    {
+        OnPowerChange(PowerBar.instance.power);
+        playerMovementScript.Unfreeze();
     }
 
     public override void OnPowerChange(int power)
@@ -103,11 +135,13 @@ public class Base : CustomableObject
             {
                 Utilities.VFXSwitch(transform,Switch);
 
-                foreach (GameObject gameObject in powerData.objectsToActivate)
+                if (power != 0)
+                {
+                   foreach (GameObject gameObject in powerData.objectsToActivate)
                 {
                     gameObject.SetActive(Switch);
+                } 
                 }
-                
             }
 
             if (power == 3)
@@ -129,7 +163,6 @@ public class Base : CustomableObject
 
         PrincipalCamera.instance.Shake(currentPowerData.shakingTime,currentPowerData.shakingPower);
 
-        
         PrincipalCamera.instance.MoveFast(playerPosition,currentPowerData.cameraSpeed);
     }
     

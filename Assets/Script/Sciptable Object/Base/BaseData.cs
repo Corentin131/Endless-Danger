@@ -13,6 +13,5 @@ public class BaseData : ScriptableObject
     public Sprite icon;
 
     [Header("Playing Data")]
-    public float delayBetweenMovement;
     public float powerMaxDistance = 20;
 }

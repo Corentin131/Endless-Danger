@@ -14,7 +14,10 @@ public class CustomableObject : MonoBehaviour
         playerMovementScript.onStartTransitState += () => OnStartTransitState();
         playerMovementScript.onStopTransitState += () => OnStopTransitState();
         playerMovementScript.onHitTransform += OnHitTransform;
+        
         PowerBar.instance.onPowerChange += OnPowerChange;
+        PowerBar.instance.OnStartRecharge += OnStartRecharge;
+        PowerBar.instance.OnStopRecharge += OnStopRecharge;
     }
 
     public virtual void OnTargeterInputHolding(Vector3 mousePosition)
@@ -44,6 +47,16 @@ public class CustomableObject : MonoBehaviour
     }
 
     public virtual void OnHitTransform(Transform transform,Vector3 playerPosition , Vector3 vfxPosition, Vector3 direction)
+    {
+
+    }
+
+    public virtual void OnStartRecharge()
+    {
+
+    }
+
+    public virtual void OnStopRecharge()
     {
 
     }

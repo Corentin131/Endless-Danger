@@ -1,10 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    public bool shootByRayCast = true;
+    [Serializable]
+    public enum TypeOfShoot
+    {
+        FastShoot,
+        PhysicShoot
+    }
+    public TypeOfShoot typeOfShoot;
 
     [Header("Sources")]
     public GameObject ball;
@@ -16,6 +23,12 @@ public class Shooter : MonoBehaviour
     public float distanceBeforeDestroy;
 
     Vector3 direction;
+    PhysicBall currentBall;
+
+    void Start()
+    {
+        ChargePhysicObject();
+    }
 
     void Update()
     {
@@ -25,24 +38,21 @@ public class Shooter : MonoBehaviour
 
     public void Shoot()
     {
-        if (shootByRayCast)
+        switch (typeOfShoot)
         {
-            ShootByRaycast();
+            case TypeOfShoot.FastShoot:
+                ShootByRaycast();
+                 break;
+
+            case TypeOfShoot.PhysicShoot:
+                ShootPhysicObject();
+                break;
         }
     }
 
     void ShootByRaycast()
     {
-        foreach(ParticleSystem particleSystem in onShootParticles)
-        {
-            particleSystem.Play();
-        }
-
-        foreach(Animator animator in onShootAnimations)
-        {
-            animator.SetTrigger("Shoot");
-        }
-    
+        PlayVfx();
         RaycastHit hit;
         DamageManager damageManager;
 
@@ -67,6 +77,30 @@ public class Shooter : MonoBehaviour
         {
             fastBallManager.destroyDistance = distanceBeforeDestroy;
         }
+    }
+
+    void PlayVfx()
+    {
+        foreach(ParticleSystem particleSystem in onShootParticles)
+        {
+            particleSystem.Play();
+        }
+
+        foreach(Animator animator in onShootAnimations)
+        {
+            animator.SetTrigger("Shoot");
+        }
+    }
+    void ShootPhysicObject()
+    {
+        PlayVfx();
+        currentBall.Shoot();
+    }
+
+    public void ChargePhysicObject()
+    {
+        currentBall = Instantiate(ball,transform.position,transform.rotation,transform.parent).GetComponent<PhysicBall>();
+        currentBall.Charge();
     }
 
 
