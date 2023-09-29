@@ -165,12 +165,15 @@ public class AnimationPack : MonoBehaviour
         public RotateRandomly(AnimationPack animationPack)
         {
             this.animationPack = animationPack;
-            eulers = new Vector3(Random.Range(1,2),Random.Range(1,2),Random.Range(1,2))*animationPack.speed;
+            if (animationPack.toVector.x == 0 && animationPack.toVector.y == 0 && animationPack.toVector.z == 0)
+                eulers = new Vector3(Random.Range(1,2),Random.Range(1,2),Random.Range(1,2))*animationPack.speed;
+            else
+                eulers = new Vector3(animationPack.toVector.x,animationPack.toVector.y,animationPack.toVector.z);
         }
 
         public override CurrentState ExecuteState()
         {
-            animationPack.transform.Rotate(eulers);
+            animationPack.transform.Rotate(eulers*Time.deltaTime);
             return base.ExecuteState();
         }
     }

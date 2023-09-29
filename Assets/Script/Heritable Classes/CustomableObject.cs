@@ -9,10 +9,10 @@ public class CustomableObject : MonoBehaviour
 
     public virtual void Start()
     {
-        playerMovementScript.onStaticState += () => OnStaticState();
-        playerMovementScript.onTransitState += () => OnTransitState();
-        playerMovementScript.onStartTransitState += () => OnStartTransitState();
-        playerMovementScript.onStopTransitState += () => OnStopTransitState();
+        playerMovementScript.onStaticState += OnStaticState;
+        playerMovementScript.onTransitState += OnTransitState;
+        playerMovementScript.onStartTransitState += OnStartTransitState;
+        playerMovementScript.onStopTransitState += OnStopTransitState;
         playerMovementScript.onHitTransform += OnHitTransform;
         
         PowerBar.instance.onPowerChange += OnPowerChange;
@@ -20,6 +20,18 @@ public class CustomableObject : MonoBehaviour
         PowerBar.instance.OnStopRecharge += OnStopRecharge;
     }
 
+    public virtual void DestroyObject()
+    {
+        playerMovementScript.onStaticState -= OnStaticState;
+        playerMovementScript.onTransitState -= OnTransitState;
+        playerMovementScript.onStartTransitState -= OnStartTransitState;
+        playerMovementScript.onStopTransitState -= OnStopTransitState;
+        playerMovementScript.onHitTransform -= OnHitTransform;
+        
+        PowerBar.instance.onPowerChange -= OnPowerChange;
+        PowerBar.instance.OnStartRecharge -= OnStartRecharge;
+        PowerBar.instance.OnStopRecharge -= OnStopRecharge;
+    }
     public virtual void OnTargeterInputHolding(Vector3 mousePosition)
     {
        

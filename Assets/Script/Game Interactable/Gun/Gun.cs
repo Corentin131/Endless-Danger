@@ -19,6 +19,11 @@ public class Gun : CustomableObject
     public override void Start()
     {
         PlayerActions.instance.onFireInputHolding += Shoot;
+        FireButton.instance.maxBullet = skinManagerScript.currentGunData.numberOfBullet;
+        FireButton.instance.currentBullet = skinManagerScript.currentGunData.numberOfBullet;
+        FireButton.instance.timeToRecharge = skinManagerScript.currentGunData.timeToRecharge;
+
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x,skinManagerScript.currentBaseScript.transform.eulerAngles.y,transform.eulerAngles.z);
         base.Start();
     }
 
@@ -39,6 +44,12 @@ public class Gun : CustomableObject
            FireButton.instance.SubtractBullet(1);
         }
         
+    }
+
+    public override void DestroyObject()
+    {
+        base.DestroyObject();
+        PlayerActions.instance.onFireInputHolding -= Shoot;
     }
 
     IEnumerator Delay()

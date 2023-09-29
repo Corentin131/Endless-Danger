@@ -16,9 +16,9 @@ public class SkinManager : MonoBehaviour
     [HideInInspector] public Saw currentSawScript;
     [HideInInspector] public Gun currentGunScript;
 
-    BaseData currentBaseData;
-    SawData currentSawData;
-    GunData currentGunData;
+    [HideInInspector]public BaseData currentBaseData;
+    [HideInInspector]public SawData currentSawData;
+    [HideInInspector]public GunData currentGunData;
 
     PlayerMovement playerMovementScript;
 
@@ -36,30 +36,45 @@ public class SkinManager : MonoBehaviour
         if (sawData != currentSawData)
         {
             //Initialize Saw
+            if (currentSawObject != null)
+            {
+                currentSawScript.DestroyObject();
+                Destroy(currentSawObject);
+            }
             currentSawData = sawData;
             currentSawObject = Instantiate(sawData.prefab,transform.position,Quaternion.identity,header);
             
             currentSawScript = currentSawObject.GetComponent<Saw>();
             currentSawScript.playerMovementScript = playerMovementScript;
             currentSawScript.skinManagerScript = this;
-
         }
 
         if (gunData != currentGunData)
         {
             //Initialize Gun
+            if (currentGunObject != null)
+            {
+                currentGunScript.DestroyObject();
+                Destroy(currentGunObject);
+            }
+
             currentGunData = gunData;
             currentGunObject = Instantiate(gunData.prefab,gunSpawnPosition.position,Quaternion.identity,header);
 
             currentGunScript = currentGunObject.GetComponent<Gun>();
             currentGunScript.playerMovementScript = playerMovementScript;
             currentGunScript.skinManagerScript = this;
-
         }
 
         if (baseData != currentBaseData)
         {
             //Initialize Base
+            if (currentBaseObject != null)
+            {
+                currentBaseScript.DestroyObject();
+                Destroy(currentBaseObject);
+            }
+
             currentBaseData = baseData;
 
             currentBaseObject = Instantiate(baseData.prefab,transform.position,Quaternion.identity,header);
@@ -67,7 +82,6 @@ public class SkinManager : MonoBehaviour
             currentBaseScript = currentBaseObject.GetComponent<Base>();
             currentBaseScript.playerMovementScript = playerMovementScript;
             currentBaseScript.skinManagerScript = this;
-
         }
     }
 }

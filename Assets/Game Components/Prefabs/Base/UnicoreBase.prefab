@@ -374,6 +374,7 @@ MonoBehaviour:
     objectsToActivate:
     - {fileID: 7259325179430464759}
     currentNbOfShoot: 0
+  startRotation: 0
   rotationToAdd: 90
   powerMaxDistance: 20
 --- !u!1 &6686759300505625266
@@ -5634,6 +5635,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7484956527796837978, guid: b366da5f6dc3e3f41b4bc6038e0c4a6f,
+        type: 3}
+      propertyPath: m_Emitting
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b366da5f6dc3e3f41b4bc6038e0c4a6f, type: 3}
 --- !u!4 &6448265315357767514 stripped
@@ -6410,6 +6416,11 @@ PrefabInstance:
     - target: {fileID: 5980730003757463043, guid: b366da5f6dc3e3f41b4bc6038e0c4a6f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7484956527796837978, guid: b366da5f6dc3e3f41b4bc6038e0c4a6f,
+        type: 3}
+      propertyPath: m_Emitting
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

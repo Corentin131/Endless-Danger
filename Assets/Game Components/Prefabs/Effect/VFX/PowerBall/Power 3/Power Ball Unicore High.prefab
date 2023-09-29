@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2080926542191251342}
   m_Layer: 0
-  m_Name: Power Ball
+  m_Name: Power Ball Unicore High
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1119856564826803393
 Transform:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.17
+      scalar: 0.28
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -202,7 +202,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.59
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -900,7 +900,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.21
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4953,10 +4953,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationType: 3
+  easeType: 0
+  animateOnStart: 1
   time: 0
-  speed: 1
+  speed: 800
   destroyOnFinish: 0
   to: 0
+  toVector: {x: 0, y: 0, z: 0}
 --- !u!4 &3073974877616426324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 33febd6a4a6ac484c9bc075d1f5177a0,

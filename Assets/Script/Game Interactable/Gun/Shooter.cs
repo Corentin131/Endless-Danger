@@ -27,7 +27,10 @@ public class Shooter : MonoBehaviour
 
     void Start()
     {
-        ChargePhysicObject();
+        if (typeOfShoot == TypeOfShoot.PhysicShoot)
+        {
+            ChargePhysicObject();
+        }
     }
 
     void Update()
@@ -84,6 +87,7 @@ public class Shooter : MonoBehaviour
         foreach(ParticleSystem particleSystem in onShootParticles)
         {
             particleSystem.Play();
+            
         }
 
         foreach(Animator animator in onShootAnimations)

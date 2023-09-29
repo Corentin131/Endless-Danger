@@ -94,14 +94,12 @@ public class Utilities
                     }
                     
                     //Calculate adhesion
-                    Vector3 oppositeDir = -direction;
-                    Debug.DrawRay(hit.point, oppositeDir*adhesion, Color.blue);
-                    Vector3 finalPoint = (hit.point+(oppositeDir*adhesion));
+                    Vector3 adhesionDir = hit.normal;
+                    Vector3 finalPoint = (hit.point+(adhesionDir*adhesion));
 
                     Vector3 normal = hit.normal;
                     direction = Vector3.Reflect(direction, normal).normalized;
                     
-
                     currentStartPosition = finalPoint;
 
                     bounceData.Add(new BounceData
@@ -123,7 +121,6 @@ public class Utilities
           return bounceData;
 
      }
-
 
      public static Vector3 CalculateDirection(Vector3 pointA ,Vector3 pointB)
      {

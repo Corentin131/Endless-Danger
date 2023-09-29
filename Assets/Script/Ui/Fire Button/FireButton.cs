@@ -96,7 +96,7 @@ public class FireButton : MonoBehaviour
 
         while (currentBullet <= maxBullet)
         {
-            currentBullet += toAdd;;
+            currentBullet += toAdd;
             yield return new WaitForSeconds(updateRechargeTime);
         }
 

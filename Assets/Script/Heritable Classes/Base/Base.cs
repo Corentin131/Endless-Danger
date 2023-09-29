@@ -15,6 +15,7 @@ public class Base : CustomableObject
     public List<PowerData> powerDatas;
     
     [Header("Data")]
+    public float startRotation;
     public float rotationToAdd;
 
     [Header("Fight Parameters")]
@@ -46,6 +47,8 @@ public class Base : CustomableObject
         base.Start();
 
         currentPowerData = GetPowerData(1);
+        float rotation = startRotation+(skinManagerScript.currentGunScript.transform.eulerAngles.y);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x,rotation,transform.eulerAngles.y);
 
         //Initialize de nb of shoot of the PowerBar
         foreach(PowerData powerData in powerDatas)
@@ -53,6 +56,12 @@ public class Base : CustomableObject
             PowerBar.instance.SetNbOfShoot(powerData.power,powerData.nbOfShoot);
             powerData.currentNbOfShoot = powerData.nbOfShoot;
         }
+    }
+
+    public override void DestroyObject()
+    {
+        base.DestroyObject();
+        PlayerActions.instance.onTargeterInputHolding -= OnTargeterInputHolding;
     }
 
     public override void OnTargeterInputHolding(Vector3 mousePosition)
@@ -135,13 +144,14 @@ public class Base : CustomableObject
             {
                 Utilities.VFXSwitch(transform,Switch);
 
-                if (power != 0)
-                {
-                   foreach (GameObject gameObject in powerData.objectsToActivate)
+            }
+
+            if (power != 0)
+            {
+                foreach (GameObject gameObject in powerData.objectsToActivate)
                 {
                     gameObject.SetActive(Switch);
                 } 
-                }
             }
 
             if (power == 3)
