@@ -27,6 +27,7 @@ public class Base : CustomableObject
     public class PowerData
     {
         public int power;
+        public float damage;
         public float shakingTime;
         public float shakingPower;
         public float machineSpeed;
@@ -165,10 +166,10 @@ public class Base : CustomableObject
     public override void OnHitTransform(Transform transform,Vector3 playerPosition, Vector3 vfxPosition,Vector3 direction)
     {
         DamageManager damageManagerScript = transform.GetComponent<DamageManager>();
-
+        Debug.Log($"Direction 2 : {direction}");
         if (damageManagerScript != null)
         {
-            damageManagerScript.ApplyBaseDamage(vfxPosition,Quaternion.LookRotation(direction, Vector3.up));
+            damageManagerScript.ApplyBaseDamage(GetPowerData(PowerBar.instance.power).damage,vfxPosition,Quaternion.LookRotation(direction, Vector3.up),direction);
         }
 
         PrincipalCamera.instance.Shake(currentPowerData.shakingTime,currentPowerData.shakingPower);

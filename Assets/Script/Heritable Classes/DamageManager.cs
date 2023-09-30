@@ -21,7 +21,7 @@ public class DamageManager : MonoBehaviour
         public List<GameObject> effects;
     }
 
-    public virtual void ApplyGunDamage(Vector3 position)
+    public virtual void ApplyGunDamage(float damage,Vector3 position,Vector3 direction)
     {
         if (gunImpactEffects != null)
         {
@@ -32,10 +32,10 @@ public class DamageManager : MonoBehaviour
         }  
     }
 
-    public virtual void ApplyBaseDamage(Vector3 position,Quaternion rotation ,[Optional]List<GameObject> effectToSpawn)
+    public virtual void ApplyBaseDamage(float damage,Vector3 position,Quaternion EffectSpawnRotation ,Vector3 direction,[Optional]List<GameObject> effectToSpawn)
     {
         List<GameObject> effects;
-        
+
         if (effectToSpawn != null)
         {
             effects = effectToSpawn;
@@ -45,9 +45,12 @@ public class DamageManager : MonoBehaviour
             effects = GetVfxData(PowerBar.instance.power).effects;
         }
 
-        foreach (GameObject objectToSpawn in effects)
+        if (effects != null)
         {
-            Instantiate(objectToSpawn,position,rotation);
+            foreach (GameObject objectToSpawn in effects)
+            {
+                Instantiate(objectToSpawn,position,EffectSpawnRotation);
+            }
         }
     }
 

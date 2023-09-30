@@ -180,8 +180,6 @@ public class PlayerMovement : MonoBehaviour
                 Utilities.VerifyIfNull(playerMovement.onStopTransitState);
             }
 
-            VerifyBounce();
-
             movement.MoveStrength();
 
             Utilities.VerifyIfNull(playerMovement.onTransitState);
@@ -190,6 +188,8 @@ public class PlayerMovement : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
             playerMovement.skinManagerScript.currentGunScript.RotateTo(rotation);
             playerMovement.skinManagerScript.currentBaseScript.RotateTo(rotation);
+
+            VerifyBounce();
 
             return base.ExecuteState();
         }
@@ -206,7 +206,9 @@ public class PlayerMovement : MonoBehaviour
 
                     if (playerMovement.onHitTransform != null)
                     {
-                       playerMovement.onHitTransform(newCurrentTargetTransform,points[movement.GetIndex()],hitPoints[movement.GetIndex()],direction);
+                        Vector3 direction2 = Utilities.CalculateDirection(points[movement.GetIndex()-1],playerMovement.transform.position);
+                        Debug.Log($"Direction 1 :{direction2}");
+                       playerMovement.onHitTransform(newCurrentTargetTransform,points[movement.GetIndex()],hitPoints[movement.GetIndex()],direction2);
                     }
 
                 }

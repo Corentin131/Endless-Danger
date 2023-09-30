@@ -71,7 +71,8 @@ public class Shooter : MonoBehaviour
 
             if (damageManager != null)
             {
-                damageManager.ApplyGunDamage(hit.point);
+                float damage = PlayerStats.instance.currentGun.damage;
+                damageManager.ApplyGunDamage(damage,hit.point,direction);
             }
 
             fastBallManager.destroyDistance = Vector3.Distance(transform.position,hit.point);

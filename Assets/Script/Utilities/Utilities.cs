@@ -95,9 +95,10 @@ public class Utilities
                     
                     //Calculate adhesion
                     Vector3 adhesionDir = hit.normal;
+                    adhesionDir = new Vector3(adhesionDir.x,0,adhesionDir.z);
                     Vector3 finalPoint = (hit.point+(adhesionDir*adhesion));
 
-                    Vector3 normal = hit.normal;
+                    Vector3 normal = new Vector3(hit.normal.x,0,hit.normal.z);
                     direction = Vector3.Reflect(direction, normal).normalized;
                     
                     currentStartPosition = finalPoint;

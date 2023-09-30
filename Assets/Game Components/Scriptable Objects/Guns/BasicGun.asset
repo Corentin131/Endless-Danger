@@ -16,6 +16,6 @@ MonoBehaviour:
   cost: 100
   prefab: {fileID: 5201882204969428833, guid: 7accadc07a98a6e46a1abd3d1db0abd3, type: 3}
   icon: {fileID: 0}
-  damage: 50
+  damage: 10
   numberOfBullet: 50
   timeToRecharge: 10

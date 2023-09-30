@@ -41,11 +41,12 @@ public class FireButton : MonoBehaviour
     void Update()
     {
         rechargeBar.fillAmount = currentBullet/maxBullet;
-
+        /*
         if (isCharging == false && currentBullet <= 0)
         {
             Recharge();
         }
+        */
     }
 
     public void SubtractBullet(int howMany)

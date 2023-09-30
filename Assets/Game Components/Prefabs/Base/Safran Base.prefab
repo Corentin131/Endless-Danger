@@ -10275,6 +10275,7 @@ MonoBehaviour:
   transitVfxHeader: {fileID: 581099123467977504}
   powerDatas:
   - power: 1
+    damage: 50
     shakingTime: 0
     shakingPower: 0
     machineSpeed: 300
@@ -10289,6 +10290,7 @@ MonoBehaviour:
     - {fileID: 6643190580967696640}
     currentNbOfShoot: 0
   - power: 2
+    damage: 100
     shakingTime: 0
     shakingPower: 0
     machineSpeed: 500
@@ -10303,6 +10305,7 @@ MonoBehaviour:
     - {fileID: 8917835392135744757}
     currentNbOfShoot: 0
   - power: 3
+    damage: 300
     shakingTime: 0.15
     shakingPower: 0.3
     machineSpeed: 700
