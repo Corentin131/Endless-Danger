@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Data")]
     public float stopDistance;
+    public float goBackDistance;
     public float shootDistance;
     public float shootDelay;
     public float gunRotationSpeed;
@@ -52,11 +53,16 @@ public class Enemy : MonoBehaviour
 
     public virtual void RotateGun()
     {
-        Vector3 directionToTarget = Utilities.CalculateDirection(targetedPlayer.transform.position,transform.position);
+        RotateTo(gunHeader,targetedPlayer.transform.position,gunRotationSpeed);
+    }
+
+    void RotateTo(Transform transform , Vector3 target,float speed)
+    {
+        Vector3 directionToTarget = Utilities.CalculateDirection(target,transform.position);
         directionToTarget = new Vector3(directionToTarget.x,0,directionToTarget.z);
         Quaternion rotationToTarget = Quaternion.LookRotation(directionToTarget);
 
-        gunHeader.rotation = Quaternion.Slerp(gunHeader.rotation, rotationToTarget, gunRotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationToTarget, speed * Time.deltaTime);
     }
 
     IEnumerator WaitingBeforeMoving(float delay)
@@ -124,15 +130,23 @@ public class Enemy : MonoBehaviour
         {
             base.ExecuteState();
 
-            if (distance <= enemy.stopDistance)
+            if (distance <= enemy.goBackDistance)
+            {
+                Debug.Log("goBack");
+                enemy.navMeshAgent.isStopped = false;
+                enemy.navMeshAgent.SetDestination(new Vector3(0,0,0));
+            }
+            else if (distance <= enemy.stopDistance)
             {
                 enemy.navMeshAgent.isStopped = true;
+                enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
             }
             else 
             {
                 enemy.navMeshAgent.isStopped = false;
                 enemy.navMeshAgent.SetDestination(enemy.targetedPlayer.transform.position);
             }
+
         }
     }
 
@@ -146,6 +160,17 @@ public class Enemy : MonoBehaviour
 
         public override void ExecuteState()
         {
+            if (distance <= enemy.goBackDistance)
+            {
+                enemy.navMeshAgent.isStopped = false;
+                enemy.navMeshAgent.SetDestination(new Vector3(0,0,0));
+            }
+            else if (distance <= enemy.stopDistance)
+            {
+                enemy.navMeshAgent.isStopped = true;
+                enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
+            }
+
             base.ExecuteState();
         }
 

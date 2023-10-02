@@ -24,6 +24,14 @@ public class EnemyDamageManager : DamageManager
         enemy = GetComponent<Enemy>();
     }
 
+    private void Update() 
+    {
+        if (currentHealth <= 0)
+        {
+
+        }
+    }
+
     public override void ApplyGunDamage(float damage,Vector3 position, Vector3 direction)
     {
         base.ApplyGunDamage(damage,position ,direction);
@@ -47,5 +55,14 @@ public class EnemyDamageManager : DamageManager
         rbEnemy.AddForce(force);
 
         Debug.Log($"Damage on a enemy of {damage} on {direction}; Life left : {currentHealth}");
+    }
+
+    public override void ApplyExplosiveDamage(Vector3 position, float damage, float force,float radius)
+    {
+        base.ApplyExplosiveDamage(position, damage, force,radius);
+        enemy.ReceiveDamage(2f);
+        rbEnemy.AddExplosionForce(force,position,radius);
+        currentHealth -= damage;
+        Debug.Log("ForceAdded");
     }
 }

@@ -54,9 +54,9 @@ public class DamageManager : MonoBehaviour
         }
     }
 
-    public virtual void ApplyExplosiveDamage(Vector3 position,float damage)
+    public virtual void ApplyExplosiveDamage(Vector3 position,float damage,float force,float radius)
     {
-        Debug.Log(transform + " "+damage);
+        Debug.Log("Hit by an explosion ");
     }
 
     BaseVfxData GetVfxData(int power)

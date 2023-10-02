@@ -9,7 +9,6 @@ public class LowRechargeGun : Gun
     private void Update() 
     {
         int index = Convert.ToInt32(Math.Abs(currentBullet))-1;
-        Debug.Log(index);
         if (isCharging && index != rechargedObjectIndex)
         {
             shooters[index].ChargePhysicObject();

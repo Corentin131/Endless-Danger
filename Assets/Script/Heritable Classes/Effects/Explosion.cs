@@ -11,10 +11,10 @@ public class Explosion : MonoBehaviour
     public bool executeOperationOnStart;
 
     [Header("Data")]
-    public LayerMask layerMask;
     public float maxDamage;
     public float shakeDelay;
     public float shakePower;
+    public float explosionForce;
 
     [Header("Out")]
     public List<GameObject> listOfHitObjects;
@@ -50,8 +50,10 @@ public class Explosion : MonoBehaviour
                 float distanceTargetAndExplosion = Vector3.Distance(collider.transform.position,transform.position);
                 targetTouch = collider.transform.position;
                 float damage = maxDamage/distanceTargetAndExplosion;
-                damageManager.ApplyExplosiveDamage(transform.position,damage);
+                damageManager.ApplyExplosiveDamage(transform.position,damage,explosionForce,radius);
             }
+
+            
 
         }
         

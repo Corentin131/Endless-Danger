@@ -9793,12 +9793,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 10
   executeOperationOnStart: 1
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  maxDamage: 50
+  maxDamage: 500
   shakeDelay: 0.25
   shakePower: 0.6
+  explosionForce: 4000
   listOfHitObjects: []
 --- !u!114 &3247688046680162088
 MonoBehaviour:
