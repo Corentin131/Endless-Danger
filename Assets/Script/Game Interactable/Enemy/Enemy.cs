@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     CurrentState currentState;
     bool canShoot = true;
     bool canMove = true;
-    
+    GameObject currentTargetGun;
 
     void Start()
     {
@@ -37,15 +37,12 @@ public class Enemy : MonoBehaviour
 
     public void ReceiveDamage(float delay)
     {
-        if (canMove == true)
-        {
-            StartCoroutine(WaitingBeforeMoving(delay));
-        }
+        currentState = new WaitingBeforeMove(this,delay);
     }
 
     public virtual void Shoot()
     {
-        if (canMove == true)
+        if (canMove == true && currentTargetGun != null &&currentTargetGun.tag != "Enemy")
         {
             gun.Shoot();
         }
@@ -53,24 +50,25 @@ public class Enemy : MonoBehaviour
 
     public virtual void RotateGun()
     {
-        RotateTo(gunHeader,targetedPlayer.transform.position,gunRotationSpeed);
+        RotateTo(gunHeader,targetedPlayer.transform.position,gunRotationSpeed,true);
     }
 
-    void RotateTo(Transform transform , Vector3 target,float speed)
+    void RotateTo(Transform transform , Vector3 target,float speed,bool freezeY = false)
     {
         Vector3 directionToTarget = Utilities.CalculateDirection(target,transform.position);
-        directionToTarget = new Vector3(directionToTarget.x,0,directionToTarget.z);
+        float y = 0;
+
+        if (freezeY == true)
+        {
+            y = directionToTarget.y;
+        }
+
+        directionToTarget = new Vector3(directionToTarget.x,directionToTarget.y,directionToTarget.z);
         Quaternion rotationToTarget = Quaternion.LookRotation(directionToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, rotationToTarget, speed * Time.deltaTime);
     }
 
-    IEnumerator WaitingBeforeMoving(float delay)
-    {
-        currentState = new DamageReceived(this);
-        yield return new WaitForSeconds(delay);
-        currentState = new MovingState(this);
-    }
 
     IEnumerator ShootDelay()
     {
@@ -108,6 +106,15 @@ public class Enemy : MonoBehaviour
 
             enemy.targetedPlayer = closestPlayer;
 
+            GameObject target = null;
+
+            foreach (Shooter shooter in enemy.gun.shooters)
+            {
+                target = shooter.currentTarget;
+            }
+
+            enemy.currentTargetGun = target;
+
             distance = Vector3.Distance(enemy.transform.position , enemy.targetedPlayer.transform.position);
             enemy.RotateGun();
 
@@ -132,7 +139,6 @@ public class Enemy : MonoBehaviour
 
             if (distance <= enemy.goBackDistance)
             {
-                Debug.Log("goBack");
                 enemy.navMeshAgent.isStopped = false;
                 enemy.navMeshAgent.SetDestination(new Vector3(0,0,0));
             }
@@ -145,32 +151,31 @@ public class Enemy : MonoBehaviour
             {
                 enemy.navMeshAgent.isStopped = false;
                 enemy.navMeshAgent.SetDestination(enemy.targetedPlayer.transform.position);
+                enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
             }
-
         }
     }
 
-    public class DamageReceived : CurrentState
+    public class WaitingBeforeMove : CurrentState
     {
-        public DamageReceived(Enemy enemy) : base(enemy)
+        float time = 0;
+        float delay = 0;
+        public WaitingBeforeMove(Enemy enemy,float delay) : base(enemy)
         {
             enemy.navMeshAgent.isStopped = true;
             enemy.canMove = false;
+            this.delay = delay;
         }
 
         public override void ExecuteState()
         {
-            if (distance <= enemy.goBackDistance)
-            {
-                enemy.navMeshAgent.isStopped = false;
-                enemy.navMeshAgent.SetDestination(new Vector3(0,0,0));
-            }
-            else if (distance <= enemy.stopDistance)
-            {
-                enemy.navMeshAgent.isStopped = true;
-                enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
-            }
+            enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
+            time += Time.deltaTime;
 
+            if (time >= delay)
+            {
+                enemy.currentState = new MovingState(enemy);
+            }
             base.ExecuteState();
         }
 

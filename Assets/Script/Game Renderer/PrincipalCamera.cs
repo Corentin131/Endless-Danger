@@ -39,7 +39,7 @@ public class PrincipalCamera : MonoBehaviour
 
     public void Shake(float duration,float power)
     {
-        StartCoroutine(Utilities.ShakeINumerator(duration,power,transform));
+        StartCoroutine(Utilities.ShakeINumerator(duration,power,transform,Vector3.zero));
     }
 
     public void MoveFast(Vector3 to,float speed)

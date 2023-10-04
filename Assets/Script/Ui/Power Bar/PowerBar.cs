@@ -108,7 +108,7 @@ public class PowerBar : MonoBehaviour
         {
             if (power == 3)
             {
-                StartCoroutine(Utilities.ShakeINumerator(0.2f,1.5f,currentPowerImage.transform));
+                StartCoroutine(Utilities.ShakeINumerator(0.2f,1.5f,currentPowerImage.transform,transform.localPosition));
                 yield return new WaitForSeconds(0.2f);
             }
             yield return null;

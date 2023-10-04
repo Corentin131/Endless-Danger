@@ -6,13 +6,19 @@ using UnityEngine.UIElements;
 public class FastBallManager : MonoBehaviour
 {
     [HideInInspector] public Vector3 startPosition;
+    [HideInInspector] public Vector3 startRotation;
     [HideInInspector] public Vector3 direction;
     [HideInInspector] public float destroyDistance;
     [HideInInspector] public float speed;
 
+    void Start()
+    {
+        transform.eulerAngles = startRotation;
+    }
     void Update()
     {
-        transform.Translate(transform.TransformDirection(-Vector3.forward)*speed*Time.deltaTime);
+        transform.eulerAngles = startRotation;
+        transform.Translate(Vector3.forward*speed*Time.deltaTime);
 
         float distance = Vector3.Distance(transform.position,startPosition);
 

@@ -20,6 +20,7 @@ public class AnimationPack : MonoBehaviour
     public LeanTweenType easeType;
     public bool animateOnStart = true;
     public float time;
+    public float timeBeforeStart;
     public float speed;
 
     public bool destroyOnFinish;
@@ -38,6 +39,40 @@ public class AnimationPack : MonoBehaviour
     void Start()
     {
         originalScale = transform.localScale;
+        StartCoroutine(WaitBeforeStart());
+    }
+
+    void Update()
+    {
+        if (currentState != null)
+        {
+            currentState.ExecuteState();
+        }
+    }
+
+
+    public void ScaleUp(Vector3 toAdd,float time)
+    {
+        Vector3 currentScale = transform.localScale;
+        toAdd = currentScale+toAdd;
+        LeanTween.scale(gameObject,toAdd,time);
+    }
+
+    public void ScaleDown(Vector3 toRemove,float time)
+    {
+        Vector3 currentScale = transform.localScale;
+        toRemove = currentScale-toRemove;
+        LeanTween.scale(gameObject,toRemove,time);
+    }
+
+    public void ScaleToOrigin(float time)
+    {
+        LeanTween.scale(gameObject,originalScale,time);
+    }
+
+    IEnumerator WaitBeforeStart()
+    {
+        yield return new WaitForSeconds(timeBeforeStart);
         if (animateOnStart)
         {
             switch(animationType)
@@ -59,33 +94,7 @@ public class AnimationPack : MonoBehaviour
                     break;
             }
         }
-    }
 
-    void Update()
-    {
-        if (currentState != null)
-        {
-            currentState.ExecuteState();
-        }
-    }
-
-    public void ScaleUp(Vector3 toAdd,float time)
-    {
-        Vector3 currentScale = transform.localScale;
-        toAdd = currentScale+toAdd;
-        LeanTween.scale(gameObject,toAdd,time);
-    }
-
-    public void ScaleDown(Vector3 toRemove,float time)
-    {
-        Vector3 currentScale = transform.localScale;
-        toRemove = currentScale-toRemove;
-        LeanTween.scale(gameObject,toRemove,time);
-    }
-
-    public void ScaleToOrigin(float time)
-    {
-        LeanTween.scale(gameObject,originalScale,time);
     }
 
     public void MoveTo(Vector3 to,float speed,float time,[Optional]LeanTweenType leanTweenType)

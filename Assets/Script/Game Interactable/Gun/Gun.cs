@@ -18,11 +18,10 @@ public class Gun : CustomableObject
     [HideInInspector]public bool canShoot = true;
     [HideInInspector]public int index = 0;
     [HideInInspector]public bool isCharging;
+    public float damage;
     public float maxBullet;
     public float rechargeTime;
     [HideInInspector]public float currentBullet;
-    
-
     public override void Start()
     {
         if (interactWithFireButton == true)
@@ -35,9 +34,17 @@ public class Gun : CustomableObject
         
             transform.eulerAngles = new Vector3(transform.eulerAngles.x,skinManagerScript.currentBaseScript.transform.eulerAngles.y,transform.eulerAngles.z);
             base.Start();
+
             maxBullet = skinManagerScript.currentGunData.numberOfBullet;
             rechargeTime = skinManagerScript.currentGunData.timeToRecharge;
+            damage = PlayerStats.instance.currentGun.damage;
         }
+
+        foreach (Shooter shooter in shooters)
+        {
+            shooter.damage = damage;
+        }
+
         currentBullet = maxBullet;
     }
 

@@ -7,18 +7,26 @@ using TMPro;
 public class TextManager : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public TextMeshPro text2;
     [HideInInspector]public float intValue;
 
     void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
+        text2 = GetComponent<TextMeshPro>();
     }
 
     public void SetTextInt(float value)
     {
         try
         {
-            text.text = value.ToString();
+            if (text != null)
+            {
+                text.text = value.ToString();
+            }else
+            {
+                text2.text = value.ToString();
+            }
         }catch
         {
 
@@ -29,6 +37,12 @@ public class TextManager : MonoBehaviour
 
     public void SetTextString(string value)
     {
-        text.text = value;
+        if (text != null)
+        {
+            text.text = value;
+        }else
+        {
+            text2.text = value;
+        }
     }
 }

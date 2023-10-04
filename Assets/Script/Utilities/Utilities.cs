@@ -166,9 +166,9 @@ public class Utilities
           
      }
 
-     public static IEnumerator ShakeINumerator(float duration,float power,Transform transform)
+     public static IEnumerator ShakeINumerator(float duration,float power,Transform transform,Vector3 startPosition)
      {
-          Vector3 initialPosition = transform.localPosition;
+          Vector3 initialPosition = startPosition;
 
           float timer = 0;
 

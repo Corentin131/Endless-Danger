@@ -11,6 +11,7 @@ public class Shooter : MonoBehaviour
         FastShoot,
         PhysicShoot
     }
+
     public TypeOfShoot typeOfShoot;
 
     [Header("Sources")]
@@ -21,9 +22,13 @@ public class Shooter : MonoBehaviour
     [Header("Data")]
     public float ballSpeed;
     public float distanceBeforeDestroy;
+    public float damage = 0;
+
+    [HideInInspector]public GameObject currentTarget;
 
     Vector3 direction;
     PhysicBall currentBall;
+    RaycastHit hit;
 
     void Start()
     {
@@ -37,6 +42,11 @@ public class Shooter : MonoBehaviour
     {
         direction = transform.TransformDirection(Vector3.forward);
         Debug.DrawRay(transform.position,direction*distanceBeforeDestroy,Color.red);
+
+        if (Physics.Raycast(transform.position, direction, out hit, distanceBeforeDestroy))
+        {
+            currentTarget = hit.transform.gameObject;
+        }
     }
 
     public void Shoot()
@@ -60,7 +70,9 @@ public class Shooter : MonoBehaviour
         DamageManager damageManager;
 
         GameObject ballInstantiated = Instantiate(ball,transform.position,transform.rotation);
+
         FastBallManager fastBallManager = ballInstantiated.GetComponent<FastBallManager>();
+        fastBallManager.startRotation = transform.eulerAngles;
 
         fastBallManager.speed = ballSpeed;
         fastBallManager.startPosition = transform.position;
@@ -70,8 +82,7 @@ public class Shooter : MonoBehaviour
             damageManager = hit.transform.gameObject.GetComponent<DamageManager>();
 
             if (damageManager != null)
-            {
-                float damage = PlayerStats.instance.currentGun.damage;
+            {   
                 damageManager.ApplyGunDamage(damage,hit.point,direction);
             }
 

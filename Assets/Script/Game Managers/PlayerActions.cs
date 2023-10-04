@@ -55,7 +55,7 @@ public class PlayerActions : MonoBehaviour
             TargeterInputUp();
         }
         
-        if (isHoldingLeft == true) TargeterInputHolding(mousePosition);
+        if (isHoldingLeft == false) TargeterInputHolding(mousePosition);
         
 
         if (Input.GetMouseButtonDown(1) && onFireInputDawn != null )
