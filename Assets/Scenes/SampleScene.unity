@@ -4010,7 +4010,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e70e228e85e1bbe4f83e5631080ab228, type: 2}
   currentBase: {fileID: 11400000, guid: 6598a82be6b656a4e9734464c58d8fcf, type: 2}
   currentSaw: {fileID: 11400000, guid: 818458f739e55844594825118d78ec08, type: 2}
-  currentGun: {fileID: 11400000, guid: 4787639782de7f14ba229771f8728d55, type: 2}
+  currentGun: {fileID: 11400000, guid: e70e228e85e1bbe4f83e5631080ab228, type: 2}
 --- !u!4 &1458545456
 Transform:
   m_ObjectHideFlags: 0
