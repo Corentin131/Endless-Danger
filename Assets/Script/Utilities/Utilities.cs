@@ -132,43 +132,46 @@ public class Utilities
 
      public static void VFXSwitch(Transform parent,bool switchOn)
      {
-          foreach (TrailRenderer element in parent.GetComponentsInChildren<TrailRenderer>())
+          if (parent != null)
           {
-               if (switchOn == true)
+               foreach (TrailRenderer element in parent.GetComponentsInChildren<TrailRenderer>())
                {
-                    element.emitting = true;
-               }else
-               {
-                    element.emitting = false;    
+                    if (switchOn == true)
+                    {
+                         element.emitting = true;
+                    }else
+                    {
+                         element.emitting = false;    
+                    }
                }
-          }
 
-          foreach (ParticleSystem element in parent.GetComponentsInChildren<ParticleSystem>())
-          {
-               if (switchOn == true)
+               foreach (ParticleSystem element in parent.GetComponentsInChildren<ParticleSystem>())
                {
-                    element.Play();
-               }else
+                    if (switchOn == true)
+                    {
+                         Debug.Log("Play");
+                         element.Play();
+                    }else
+                    {
+                         element.Stop();
+                    }
+               }
+               foreach (Light element in parent.GetComponentsInChildren<Light>())
                {
-                    element.Stop();
+                    if (switchOn == true)
+                    {
+                         element.enabled = true;
+                    }else
+                    {
+                         element.enabled = false;
+                    }
                }
           }
-          foreach (Light element in parent.GetComponentsInChildren<Light>())
-          {
-               if (switchOn == true)
-               {
-                    element.enabled = true;
-               }else
-               {
-                    element.enabled = false;
-               }
-          }
-          
      }
 
      public static IEnumerator ShakeINumerator(float duration,float power,Transform transform,Vector3 startPosition)
      {
-          Vector3 initialPosition = startPosition;
+          Vector3 initialPosition = transform.localPosition;
 
           float timer = 0;
 
@@ -184,6 +187,6 @@ public class Utilities
                yield return null;
           }
 
-          transform.localPosition = initialPosition;
+          transform.localPosition = startPosition;
      }
 }

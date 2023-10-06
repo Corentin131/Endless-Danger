@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public Action<Transform,Vector3,Vector3,Vector3> onHitTransform;
 
     [HideInInspector]public Vector3 lastTargetPosition;
-
+    [HideInInspector]public List<Vector3> attackPoints;
     SkinManager skinManagerScript;
 
     bool showLineRenderer = true;
@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         currentState = new StaticState(this);
+        SetAttackPoint();
         skinManagerScript = GetComponent<SkinManager>();
     }
 
@@ -70,6 +71,37 @@ public class PlayerMovement : MonoBehaviour
         currentState = new StaticState(this);
     }
 
+    public void SetAttackPoint()
+    {
+        float currentDegrees = 0;
+        float angleSeparation = 20;
+        float distance = 15;
+        Vector3 direction;
+        RaycastHit hit;
+
+        List<Vector3> points = new List<Vector3>();
+
+        while (currentDegrees <= 360)
+        {
+            currentDegrees += angleSeparation;
+
+            float radians = currentDegrees * Mathf.Deg2Rad; // Conversion de degrés en radians
+
+            float cos = Mathf.Cos(radians); // Utilisation de Mathf.Cos
+            float sin = Mathf.Sin(radians); // Utilisation de Mathf.Sin
+            direction = new Vector3(sin,0,cos);
+
+            if (Physics.Raycast(transform.position, direction, out hit, distance) == false)
+            {
+                
+                points.Add(transform.position+direction*distance);
+                Debug.DrawRay(transform.position,direction*distance,UnityEngine.Color.red);
+            }
+        }
+
+        attackPoints = points;
+    }
+
     public class CurrentLocalState 
     {
         public PlayerMovement playerMovement;
@@ -98,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
 
         public StaticState(PlayerMovement playerMovement) : base(playerMovement)
         {
+            playerMovement.SetAttackPoint();
             PlayerActions.instance.onTargeterInputHolding += CalculateTrajectory;
             PlayerActions.instance.onTargeterInputUp += MakeATransition;
         }

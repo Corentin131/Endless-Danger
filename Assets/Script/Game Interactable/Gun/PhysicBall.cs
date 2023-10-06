@@ -103,6 +103,8 @@ public class PhysicBall : MonoBehaviour
 
     class MovingStateDefault : CurrentState
     {
+        float timeFromShoot;
+
         public MovingStateDefault(PhysicBall physicBall) : base(physicBall)
         {
             stateName = "MovingState";
@@ -111,7 +113,12 @@ public class PhysicBall : MonoBehaviour
 
         public override void ExecuteState()
         {
+            timeFromShoot+=Time.deltaTime;
             physicBall.transform.Translate(new Vector3(0,0,1)*physicBall.speed*Time.deltaTime);
+            if (timeFromShoot > 10)
+            {
+                Destroy(physicBall.gameObject);
+            }
         }
 
     }

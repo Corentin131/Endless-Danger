@@ -10,8 +10,10 @@ public class Enemy : MonoBehaviour
     public Gun gun;
     public Transform gunHeader;
     public List<GameObject> players;
+    public Transform effectsOnMove;
 
     [HideInInspector]public GameObject targetedPlayer;
+    [HideInInspector]PlayerMovement targetedPlayerMovement;
 
     [Header("Data")]
     public float stopDistance;
@@ -19,17 +21,26 @@ public class Enemy : MonoBehaviour
     public float shootDistance;
     public float shootDelay;
     public float gunRotationSpeed;
+    public Vector3 destination;
 
     CurrentState currentState;
     bool canShoot = true;
     bool canMove = true;
     GameObject currentTargetGun;
+    Vector3 attackPosition;
 
     void Start()
     {
         currentState = new MovingState(this);
+        FindClosestPlayer();
+        targetedPlayerMovement.onStopTransitState += OnPlayerStopTransit;
     }
 
+    void OnDestroy()
+    {
+        targetedPlayerMovement.onStopTransitState -= OnPlayerStopTransit;
+    }
+    
     void Update()
     {
         currentState.ExecuteState();
@@ -69,6 +80,35 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotationToTarget, speed * Time.deltaTime);
     }
 
+    void OnPlayerStopTransit()
+    {
+        int index = UnityEngine.Random.Range(0,targetedPlayerMovement.attackPoints.Count-1);
+        attackPosition = targetedPlayerMovement.attackPoints[index];
+        targetedPlayerMovement.attackPoints.Remove(attackPosition);
+        navMeshAgent.SetDestination(attackPosition);
+        Debug.Log(attackPosition);
+    }
+
+    void FindClosestPlayer()
+    {
+        float closestDistance = 100;
+        GameObject closestPlayer = players[0];
+
+        foreach (GameObject player in players)
+        {
+            float distance = Vector3.Distance(player.transform.position,transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPlayer = player;
+            }
+
+        }
+
+        targetedPlayer = closestPlayer;
+        targetedPlayerMovement = closestPlayer.GetComponent<PlayerMovement>();
+    }
 
     IEnumerator ShootDelay()
     {
@@ -89,22 +129,8 @@ public class Enemy : MonoBehaviour
 
         public virtual void ExecuteState()
         {
-            float closestDistance = 100;
-            GameObject closestPlayer = enemy.players[0];
-
-            foreach (GameObject player in enemy.players)
-            {
-                float distance = Vector3.Distance(player.transform.position,enemy.transform.position);
-
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestPlayer = player;
-                }
-
-            }
-
-            enemy.targetedPlayer = closestPlayer;
+            
+            enemy.FindClosestPlayer();
 
             GameObject target = null;
 
@@ -123,6 +149,18 @@ public class Enemy : MonoBehaviour
                 enemy.Shoot();
             }
         }
+
+        public void StartMoving()
+        {
+            enemy.navMeshAgent.isStopped = false;
+            Utilities.VFXSwitch(enemy.effectsOnMove,true);
+        }
+        public void StopMoving()
+        {
+            enemy.navMeshAgent.isStopped = true;
+            Utilities.VFXSwitch(enemy.effectsOnMove,false);
+
+        }
     }
 
     public class MovingState : CurrentState
@@ -135,24 +173,32 @@ public class Enemy : MonoBehaviour
 
         public override void ExecuteState()
         {
-            base.ExecuteState();
-
+            //base.ExecuteState();
+            Debug.Log(enemy.attackPosition);
+            enemy.navMeshAgent.SetDestination(enemy.attackPosition);
+            /*
             if (distance <= enemy.goBackDistance)
             {
-                enemy.navMeshAgent.isStopped = false;
+                StartMoving();
                 enemy.navMeshAgent.SetDestination(new Vector3(0,0,0));
             }
             else if (distance <= enemy.stopDistance)
             {
-                enemy.navMeshAgent.isStopped = true;
+                StopMoving();
                 enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
             }
             else 
             {
-                enemy.navMeshAgent.isStopped = false;
+                StartMoving();
                 enemy.navMeshAgent.SetDestination(enemy.targetedPlayer.transform.position);
                 enemy.RotateTo(enemy.transform,enemy.targetedPlayer.transform.position,5);
             }
+
+            if (enemy.navMeshAgent.isStopped)
+            {
+                
+            }
+            */
         }
     }
 

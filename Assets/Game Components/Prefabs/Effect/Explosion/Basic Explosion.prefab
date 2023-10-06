@@ -9795,7 +9795,7 @@ MonoBehaviour:
   executeOperationOnStart: 1
   maxDamage: 500
   shakeDelay: 0.25
-  shakePower: 0.6
+  shakePower: 1.5
   explosionForce: 4000
   listOfHitObjects: []
 --- !u!114 &3247688046680162088

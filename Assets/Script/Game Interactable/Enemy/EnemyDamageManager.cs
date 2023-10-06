@@ -30,7 +30,7 @@ public class EnemyDamageManager : DamageManager
     [Serializable]
     struct SpawnDerbiesInfo
     {
-        public GameObject prefab;
+        public GameObject gameObject;
         public Vector3 posToAddToCurrentPos;
         public float force;
     }
@@ -54,22 +54,35 @@ public class EnemyDamageManager : DamageManager
 
     void SpawnDerbies(List<SpawnDerbiesInfo> prefabs ,[Optional] Vector3 direction)
     {
+
         foreach(SpawnDerbiesInfo spawnDerbiesInfo in prefabs)
         {
-            Vector3 position = transform.position+spawnDerbiesInfo.posToAddToCurrentPos;
-            GameObject spawnedObject = Instantiate(spawnDerbiesInfo.prefab,position,transform.rotation);
-            Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
-            Debug.Log("caca 1 ");
+            GameObject derbies;
+
+            if (spawnDerbiesInfo.gameObject.activeInHierarchy)
+            {
+                spawnDerbiesInfo.gameObject.transform.parent = null;
+                spawnDerbiesInfo.gameObject.SetActive(true);
+                derbies = spawnDerbiesInfo.gameObject;
+
+            }else
+            {
+                Vector3 position = transform.position+spawnDerbiesInfo.posToAddToCurrentPos;
+                derbies = Instantiate(spawnDerbiesInfo.gameObject,position,transform.rotation);
+            }
+
+            Rigidbody rb = derbies.GetComponent<Rigidbody>();
+            
             if (rb != null)
             {
-                Debug.Log("caca 2 ");
+                rb.isKinematic = false;
+                rb.useGravity = true;
                 if (lastTypeDamage != 2)
                 {
-                    Debug.Log("caca 3 ");
+                    
                     rb.velocity = direction*spawnDerbiesInfo.force;
                 }else
                 {
-                    Debug.Log("caca 4");
                     rb.AddExplosionForce(spawnDerbiesInfo.force*forceOnExplosionDeathMultiplier,transform.position,10);
                 }
                 //rb.AddExplosionForce(force,transform.position,10);

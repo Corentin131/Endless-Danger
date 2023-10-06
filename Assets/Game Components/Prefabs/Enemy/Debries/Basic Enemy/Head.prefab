@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8160205901407578660
 Transform:
   m_ObjectHideFlags: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d39fedbbdbc3c44c98a3dd018d6a486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 5
+  delay: 2
   startCountdownOnStart: 1
 --- !u!114 &1980027460553024646
 MonoBehaviour:
@@ -82,7 +82,7 @@ MonoBehaviour:
   easeType: 0
   animateOnStart: 1
   time: 1
-  timeBeforeStart: 4
+  timeBeforeStart: 1
   speed: 1
   destroyOnFinish: 0
   to: -1

@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d39fedbbdbc3c44c98a3dd018d6a486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 5
+  delay: 2
   startCountdownOnStart: 1
 --- !u!114 &8401305659847161462
 MonoBehaviour:
@@ -353,7 +353,7 @@ MonoBehaviour:
   easeType: 0
   animateOnStart: 1
   time: 1
-  timeBeforeStart: 4
+  timeBeforeStart: 1
   speed: 0
   destroyOnFinish: 0
   to: -1

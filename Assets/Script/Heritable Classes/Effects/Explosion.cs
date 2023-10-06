@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,7 +51,14 @@ public class Explosion : MonoBehaviour
                 float distanceTargetAndExplosion = Vector3.Distance(collider.transform.position,transform.position);
                 targetTouch = collider.transform.position;
                 float damage = maxDamage/distanceTargetAndExplosion;
-                damageManager.ApplyExplosiveDamage(transform.position,damage,explosionForce,radius);
+                try
+                {
+                    damageManager.ApplyExplosiveDamage(transform.position,damage,explosionForce,radius);
+                }catch(Exception e)
+                {
+                    Debug.Log(e);
+                }
+                
             }
 
             
