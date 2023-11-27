@@ -4957,6 +4957,8 @@ MonoBehaviour:
   - {fileID: 5201882203162597481}
   ballSpeed: 300
   distanceBeforeDestroy: 30
+  damage: 0
+  currentTarget: {fileID: 0}
 --- !u!1 &5201882204969428833
 GameObject:
   m_ObjectHideFlags: 0
@@ -5009,10 +5011,16 @@ MonoBehaviour:
   - {fileID: 5201882204030451322}
   delay: 0.2
   rotationToAdd: 90
-  shakePower: 0.05
-  shakeDuration: 0.05
+  shakePower: 0.1
+  shakeDuration: 0.1
+  interactWithFireButton: 1
   canShoot: 1
   index: 0
+  isCharging: 0
+  damage: 0
+  maxBullet: 0
+  rechargeTime: 0
+  currentBullet: 0
 --- !u!1 &5201882204988395951
 GameObject:
   m_ObjectHideFlags: 0

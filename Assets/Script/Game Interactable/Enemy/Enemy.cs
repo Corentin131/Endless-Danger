@@ -174,7 +174,6 @@ public class Enemy : MonoBehaviour
         public override void ExecuteState()
         {
             //base.ExecuteState();
-            Debug.Log(enemy.attackPosition);
             enemy.navMeshAgent.SetDestination(enemy.attackPosition);
             /*
             if (distance <= enemy.goBackDistance)

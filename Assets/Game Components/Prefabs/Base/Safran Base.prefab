@@ -10278,7 +10278,7 @@ MonoBehaviour:
     damage: 50
     shakingTime: 0
     shakingPower: 0
-    machineSpeed: 300
+    machineSpeed: 250
     cameraSpeed: 20
     delayToRecharge: 1
     nbOfShoot: 5
@@ -10293,7 +10293,7 @@ MonoBehaviour:
     damage: 100
     shakingTime: 0
     shakingPower: 0
-    machineSpeed: 500
+    machineSpeed: 300
     cameraSpeed: 25
     delayToRecharge: 2
     nbOfShoot: 4
@@ -10308,7 +10308,7 @@ MonoBehaviour:
     damage: 300
     shakingTime: 0.15
     shakingPower: 0.3
-    machineSpeed: 700
+    machineSpeed: 350
     cameraSpeed: 30
     delayToRecharge: 6
     nbOfShoot: 2
