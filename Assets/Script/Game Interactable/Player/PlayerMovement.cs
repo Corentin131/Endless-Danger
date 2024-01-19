@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.PackageManager;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -229,19 +230,23 @@ public class PlayerMovement : MonoBehaviour
 
         void VerifyBounce()
         {
-            Transform newCurrentTargetTransform = transforms[movement.GetIndex()];
+            int index = movement.GetIndex();
+            Transform newCurrentTargetTransform = transforms[index];
 
             if (currentTargetTransform != newCurrentTargetTransform)
             {
                 if (newCurrentTargetTransform != null)
                 {
+                    Debug.Log($"points {points[index]}");
+                    Debug.Log($"hitPoint {hitPoints[index]}");
+
                     Debug.Log("Bounce on :  "+newCurrentTargetTransform);
 
                     if (playerMovement.onHitTransform != null)
                     {
-                        Vector3 direction2 = Utilities.CalculateDirection(points[movement.GetIndex()-1],playerMovement.transform.position);
+                        Vector3 direction2 = Utilities.CalculateDirection(points[index-1],playerMovement.transform.position);
                         Debug.Log($"Direction 1 :{direction2}");
-                       playerMovement.onHitTransform(newCurrentTargetTransform,points[movement.GetIndex()],hitPoints[movement.GetIndex()],direction2);
+                        playerMovement.onHitTransform(newCurrentTargetTransform,points[index],hitPoints[index],direction2);
                     }
 
                 }

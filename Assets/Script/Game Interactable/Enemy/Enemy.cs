@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void Shoot()
     {
+        print("Shoot");
         if (canMove == true && currentTargetGun != null &&currentTargetGun.tag != "Enemy")
         {
             gun.Shoot();
@@ -82,8 +83,16 @@ public class Enemy : MonoBehaviour
 
     void OnPlayerStopTransit()
     {
-        int index = UnityEngine.Random.Range(0,targetedPlayerMovement.attackPoints.Count-1);
-        attackPosition = targetedPlayerMovement.attackPoints[index];
+        Vector3 closestPoint = Vector3.zero;
+        float lastDistance = 9999999999999;
+        foreach (Vector3 point in  targetedPlayerMovement.attackPoints)
+        {
+            if (Vector3.Distance(transform.position,point) < lastDistance)
+            {
+                closestPoint = point;
+            }
+        }
+        attackPosition = closestPoint;
         targetedPlayerMovement.attackPoints.Remove(attackPosition);
         navMeshAgent.SetDestination(attackPosition);
         Debug.Log(attackPosition);
@@ -198,6 +207,7 @@ public class Enemy : MonoBehaviour
                 
             }
             */
+            base.ExecuteState();
         }
     }
 
@@ -207,9 +217,12 @@ public class Enemy : MonoBehaviour
         float delay = 0;
         public WaitingBeforeMove(Enemy enemy,float delay) : base(enemy)
         {
-            enemy.navMeshAgent.isStopped = true;
-            enemy.canMove = false;
-            this.delay = delay;
+            if (enemy.navMeshAgent.isActiveAndEnabled)
+            {
+                enemy.navMeshAgent.isStopped = true;
+                enemy.canMove = false;
+                this.delay = delay;
+            }
         }
 
         public override void ExecuteState()

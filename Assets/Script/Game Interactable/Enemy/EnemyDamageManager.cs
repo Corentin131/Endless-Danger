@@ -141,7 +141,6 @@ public class EnemyDamageManager : DamageManager
         lastTypeDamage = 2;
         currentHealth -= damage;
         SpawnText(damage);
-
         Debug.Log("ForceAdded");
     }
 
